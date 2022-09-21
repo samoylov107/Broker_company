@@ -24,7 +24,7 @@ IF
 INSERT INTO [Broker_company].[dbo].[Customers] ([first_name], [second_name], [email], [phone])
 VALUES (@first_name, @second_name, @email, @phone)
 ELSE
-PRINT 'Пользователь с таким номером телефона уже зарегистрирован.'
+PRINT 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј РЅРѕРјРµСЂРѕРј С‚РµР»РµС„РѕРЅР° СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ.'
 END
 GO
 
