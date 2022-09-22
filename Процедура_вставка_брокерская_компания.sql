@@ -14,29 +14,28 @@ CREATE TABLE Broker_company.dbo.Customers
 GO
 
 
-CREATE OR ALTER PROCEDURE insertion_into_broker_company
+CREATE OR ALTER PROCEDURE dbo.insertion_into_broker_company
 (@first_name varchar (30),
  @second_name varchar (30),
  @email varchar (50),
  @phone BIGINT,
  @pass_num varchar (30))
 AS
+BEGIN 
+     IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
+    AND @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers)
+	RAISERROR('Пользователь с таким номером паспорта и номером телефона уже зарегистрирован!', 16, 1)
 
-  BEGIN TRY
- INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport)
- VALUES (@first_name, @second_name, @email, @phone, @pass_num)
-    END TRY
+ELSE IF @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers)
+        RAISERROR('Пользователь с таким номером паспорта уже зарегистрирован!', 16, 1)
 
-  BEGIN CATCH
-     IF Error_message() LIKE '%UQ_passport%'
-	RAISERROR('Пользователь с таким номером пасспорта уже зарегистрирован!', 16, 1)
-ELSE IF Error_message() LIKE '%UQ_phone%'
+ELSE IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
         RAISERROR('Пользователь с таким номером телефона уже зарегистрирован!', 16, 1)
-    END CATCH
+END
 GO
 
 
-EXEC [Broker_company].[dbo].[insertion_into_broker_company]
+EXEC Broker_company.dbo.insertion_into_broker_company
      @first_name = 'George',
      @second_name = 'Michael',
      @email = 'george_michael@gmail.com',
