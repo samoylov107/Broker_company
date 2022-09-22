@@ -9,7 +9,8 @@ CREATE TABLE Broker_company.dbo.Customers
  first_name varchar (30) NOT NULL,
  second_name varchar (30) NOT NULL,
  email varchar (50),
- phone BIGINT NOT NULL UNIQUE)
+ phone BIGINT UNIQUE NOT NULL ,
+ passport varchar (30) UNIQUE NOT NULL)
 GO
 
 
@@ -17,23 +18,27 @@ CREATE OR ALTER PROCEDURE insertion_into_broker_company
 (@first_name varchar (30),
  @second_name varchar (30),
  @email varchar (50),
- @phone BIGINT)
+ @phone BIGINT,
+ @pass_num varchar (30))
 AS
 
- BEGIN TRY
-INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone)
-VALUES (@first_name, @second_name, @email, @phone)
-   END TRY
+  BEGIN TRY
+ INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport)
+ VALUES (@first_name, @second_name, @email, @phone, @pass_num)
+    END TRY
 
- BEGIN CATCH
-    IF ERROR_NUMBER() = 2627
-       RAISERROR('Пользователь с таким номером телефона уже зарегистрирован!', 16, 1)
-   END CATCH
+  BEGIN CATCH
+     IF Error_message() LIKE '%UQ_passport%'
+	RAISERROR('Пользователь с таким номером пасспорта уже зарегистрирован!', 16, 1)
+ELSE IF Error_message() LIKE '%UQ_phone%'
+        RAISERROR('Пользователь с таким номером телефона уже зарегистрирован!', 16, 1)
+    END CATCH
 GO
 
 
 EXEC [Broker_company].[dbo].[insertion_into_broker_company]
      @first_name = 'George',
-	 @second_name = 'Michael',
-	 @email = 'george_michael@gmail.com',
-	 @phone = 79107771133
+     @second_name = 'Michael',
+     @email = 'george_michael@gmail.com',
+     @phone = 79107771133,
+     @pass_num = 'MP0123456789'
