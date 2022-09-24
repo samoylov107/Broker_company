@@ -32,6 +32,9 @@ ELSE IF @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers)
 
 ELSE IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
         RAISERROR('Пользователь с таким номером телефона уже зарегистрирован!', 16, 1)
+	
+  ELSE INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport)
+       VALUES (@first_name, @second_name, @email, @phone, @pass_num)
 END
 GO
 
