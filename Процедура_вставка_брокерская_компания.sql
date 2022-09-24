@@ -14,7 +14,6 @@ CREATE TABLE Broker_company.dbo.Customers
  passport varchar (30) UNIQUE NOT NULL)
 GO
 
-
 CREATE OR ALTER PROCEDURE dbo.insertion_into_broker_company
 (@first_name varchar (30),
  @second_name varchar (30),
@@ -37,7 +36,6 @@ ELSE IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
        VALUES (@first_name, @second_name, @email, @phone, @pass_num)
 END
 GO
-
 
 EXEC Broker_company.dbo.insertion_into_broker_company
      @first_name = 'George',
