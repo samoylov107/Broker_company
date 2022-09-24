@@ -4,6 +4,7 @@ GO
 USE Broker_company
 GO 
 
+IF OBJECT_ID('dbo.Customers', 'U') IS NULL 
 CREATE TABLE Broker_company.dbo.Customers 
 (id INT PRIMARY KEY IDENTITY (1,1), 
  first_name varchar (30) NOT NULL,
