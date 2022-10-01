@@ -20,22 +20,33 @@ CREATE OR ALTER PROCEDURE dbo.insertion_into_broker_company
  @second_name varchar (30),
  @email varchar (50),
  @phone BIGINT,
- @pass_num varchar (30))
+ @pass_num varchar (30),
+ @age TINYINT)
 AS
-BEGIN 
-     IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
-    AND @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers)
-	RAISERROR('Пользователь с таким номером паспорта и номером телефона уже зарегистрирован!', 16, 1)
+DECLARE	@msg_err varchar(MAX)
+DECLARE @errors_table TABLE (error_list varchar (255))
+						   		
+IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers WHERE id <> @c_id)
+     INSERT INTO @errors_table  
+     VALUES ('Пользователь с таким номером телефона уже зарегистрирован!')  
 
-ELSE IF @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers)
-        RAISERROR('Пользователь с таким номером паспорта уже зарегистрирован!', 16, 1)
+IF @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers WHERE id <> @c_id)
+     INSERT INTO @errors_table  
+     VALUES ('Пользователь с таким номером паспорта уже зарегистрирован!')  
+ 
+IF @age < 14
+     INSERT INTO @errors_table  
+     VALUES ('Минимально допустимый возраст - 14 лет!')  
 
-ELSE IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
-        RAISERROR('Пользователь с таким номером телефона уже зарегистрирован!', 16, 1)
-	
-  ELSE INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport)
-       VALUES (@first_name, @second_name, @email, @phone, @pass_num)
-END
+SELECT @msg_err = STRING_AGG(error_list, '
+')
+  FROM @errors_table 
+
+IF EXISTS (SELECT error_list FROM @errors_table)
+     THROW 50000, @msg_err, 1
+
+ INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport, age)
+ VALUES (@first_name, @second_name, @email, @phone, @pass_num, @age)
 GO
 
 EXEC Broker_company.dbo.insertion_into_broker_company
@@ -44,3 +55,4 @@ EXEC Broker_company.dbo.insertion_into_broker_company
      @email = 'george_michael@gmail.com',
      @phone = 79107771133,
      @pass_num = 'MP0123456789'
+     @age = 53
