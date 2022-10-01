@@ -11,7 +11,8 @@ CREATE TABLE Broker_company.dbo.Customers
  second_name varchar (30) NOT NULL,
  email varchar (50),
  phone BIGINT UNIQUE NOT NULL ,
- passport varchar (30) UNIQUE NOT NULL)
+ passport varchar (30) UNIQUE NOT NULL,
+ age TINYINT CHECK(age BETWEEN 14 AND 140))
 GO
 
 CREATE OR ALTER PROCEDURE dbo.insertion_into_broker_company
