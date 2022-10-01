@@ -26,11 +26,11 @@ AS
 DECLARE	@msg_err varchar(MAX)
 DECLARE @errors_table TABLE (error_list varchar (255))
 						   		
-IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers WHERE id <> @c_id)
+IF @phone IN (SELECT phone FROM Broker_company.dbo.Customers)
      INSERT INTO @errors_table  
      VALUES ('Пользователь с таким номером телефона уже зарегистрирован!')  
 
-IF @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers WHERE id <> @c_id)
+IF @pass_num IN (SELECT passport FROM Broker_company.dbo.Customers)
      INSERT INTO @errors_table  
      VALUES ('Пользователь с таким номером паспорта уже зарегистрирован!')  
  
@@ -54,5 +54,5 @@ EXEC Broker_company.dbo.insertion_into_broker_company
      @second_name = 'Michael',
      @email = 'george_michael@gmail.com',
      @phone = 79107771133,
-     @pass_num = 'MP0123456789'
+     @pass_num = 'MP0123456789',
      @age = 53
