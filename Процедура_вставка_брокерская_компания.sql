@@ -7,8 +7,8 @@ GO
 IF OBJECT_ID('dbo.Customers', 'U') IS NULL 
 CREATE TABLE Broker_company.dbo.Customers 
 (id INT PRIMARY KEY IDENTITY (1,1), 
- first_name varchar (30) NOT NULL,
- second_name varchar (30) NOT NULL,
+ first_name  varchar(30) CHECK(first_name  <> '') NOT NULL,
+ second_name varchar(30) CHECK(second_name <> '') NOT NULL,
  email varchar (50),
  phone BIGINT UNIQUE NOT NULL ,
  passport varchar (30) UNIQUE NOT NULL,
