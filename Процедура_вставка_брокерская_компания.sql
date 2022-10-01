@@ -45,8 +45,8 @@ SELECT @msg_err = STRING_AGG(error_list, '
 IF EXISTS (SELECT error_list FROM @errors_table)
      THROW 50000, @msg_err, 1
 
- INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport, age)
- VALUES (@first_name, @second_name, @email, @phone, @pass_num, @age)
+INSERT INTO Broker_company.dbo.Customers (first_name, second_name, email, phone, passport, age)
+VALUES (@first_name, @second_name, @email, @phone, @pass_num, @age)
 GO
 
 EXEC Broker_company.dbo.insertion_into_broker_company
